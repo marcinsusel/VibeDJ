@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeDJ - Professional Browser DJ Console</title>
+  <!-- Google Fonts for futuristic premium looks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Modern SVG Emoji Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎚️</text></svg>">
+</head>
+<body>
+
+  <!-- Audio elements for streaming (not visible, loaded dynamically) -->
+  <audio id="audio-deck-a" crossOrigin="anonymous"></audio>
+  <audio id="audio-deck-b" crossOrigin="anonymous"></audio>
+
+  <div class="app-container">
+    
+    <!-- Top Status Bar -->
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">🎚️</span>
+        <h1>Vibe<span>DJ</span></h1>
+        <span class="badge">PRO EDITION</span>
+      </div>
+      <div class="system-status">
+        <div id="audio-status" class="status-indicator offline">AUDIO ENGINE: STANDBY</div>
+        <div class="time-display" id="clock-display">00:00:00</div>
+      </div>
+    </header>
+
+    <!-- Main DJ Console -->
+    <main class="console-grid">
+      
+      <!-- ==================== DECK A (LEFT) ==================== -->
+      <section class="deck-panel deck-a-theme" id="deck-panel-a">
+        <div class="deck-header">
+          <span class="deck-label">DECK A</span>
+          <div class="track-info-display">
+            <div class="scrolling-text-container">
+              <div class="track-title" id="deck-a-track-title">NO TRACK LOADED</div>
+            </div>
+            <div class="time-metrics">
+              <span class="time-current" id="deck-a-time-current">00:00</span>
+              <span class="time-divider">/</span>
+              <span class="time-remaining" id="deck-a-time-remain">-00:00</span>
+            </div>
+          </div>
+          <div class="deck-bpm-indicator">
+            <span class="bpm-num" id="deck-a-bpm-display">--</span>
+            <span class="bpm-lbl">BPM</span>
+          </div>
+        </div>
+
+        <div class="deck-visualizer-container">
+          <button class="vis-toggle-btn" id="deck-a-vis-toggle" title="Toggle Visualizer Mode">📊 OVERVIEW</button>
+          <canvas class="deck-visualizer" id="deck-a-visualizer"></canvas>
+          <div class="waveform-progress" id="deck-a-progress-bar">
+            <div class="waveform-progress-fill" id="deck-a-progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="deck-core">
+          <!-- Vinyl Turntable Platter -->
+          <div class="platter-container">
+            <div class="platter-ring"></div>
+            <div class="vinyl-record" id="deck-a-vinyl">
+              <div class="vinyl-grooves"></div>
+              <div class="vinyl-label deck-a-label">
+                <div class="vinyl-label-center"></div>
+                <span class="label-text">DECK A</span>
+              </div>
+            </div>
+            <!-- Tonearm -->
+            <div class="tonearm" id="deck-a-tonearm">
+              <div class="tonearm-base"></div>
+              <div class="tonearm-arm"></div>
+              <div class="tonearm-head"></div>
+            </div>
+          </div>
+
+          <!-- Pitch & Speed controls -->
+          <div class="pitch-slider-container">
+            <span class="pitch-lbl">PITCH</span>
+            <input type="range" class="pitch-slider" id="deck-a-pitch" min="-8" max="8" step="0.05" value="0">
+            <div class="pitch-readout">
+              <span id="deck-a-pitch-value">+0.0%</span>
+              <button class="pitch-reset-btn" id="deck-a-pitch-reset">RESET</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deck Transport Controls -->
+        <div class="transport-controls">
+          <button class="cue-btn" id="deck-a-cue" title="Cue Point (C)">CUE</button>
+          <button class="play-btn" id="deck-a-play" title="Play / Pause (Space / A)">
+            <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="pause-icon hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="stop-btn" id="deck-a-stop" title="Stop Track">
+            <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+          </button>
+          <button class="next-btn" id="deck-a-next" title="Next Track">
+            <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================== CENTRAL MIXER ==================== -->
+      <section class="mixer-panel">
+        <div class="mixer-header">
+          <h3>MIXER</h3>
+        </div>
+
+        <div class="mixer-channels">
+          <!-- Channel A controls -->
+          <div class="mixer-channel-strip channel-left">
+            <div class="eq-section">
+              <span class="channel-lbl">CH A</span>
+              <div class="eq-control-row">
+                <span class="eq-lbl">HI</span>
+                <div class="knob-wrapper">
+                  <div class="knob-and-val">
+                    <div class="knob" id="mixer-a-eq-hi" data-min="-12" data-max="12" data-value="0">
+                      <div class="knob-pointer"></div>
+                    </div>
+                    <span class="eq-val" id="mixer-a-eq-hi-val">0dB</span>
+                  </div>
+                  <button class="kill-btn" id="mixer-a-kill-hi" title="Kill High Frequency">K</button>
+                </div>
+              </div>
+              <div class="eq-control-row">
+                <span class="eq-lbl">MID</span>
+                <div class="knob-wrapper">
+                  <div class="knob-and-val">
+                    <div class="knob" id="mixer-a-eq-mid" data-min="-12" data-max="12" data-value="0">
+                      <div class="knob-pointer"></div>
+                    </div>
+                    <span class="eq-val" id="mixer-a-eq-mid-val">0dB</span>
+                  </div>
+                  <button class="kill-btn" id="mixer-a-kill-mid" title="Kill Mid Frequency">K</button>
+                </div>
+              </div>
+              <div class="eq-control-row">
+                <span class="eq-lbl">LOW</span>
+                <div class="knob-wrapper">
+                  <div class="knob-and-val">
+                    <div class="knob" id="mixer-a-eq-low" data-min="-12" data-max="12" data-value="0">
+                      <div class="knob-pointer"></div>
+                    </div>
+                    <span class="eq-val" id="mixer-a-eq-low-val">0dB</span>
+                  </div>
+                  <button class="kill-btn" id="mixer-a-kill-low" title="Kill Low Frequency">K</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="fader-section">
+              <!-- VU Meter Left -->
+              <div class="vu-meter" id="deck-a-vu">
+                <div class="vu-led red"></div>
+                <div class="vu-led amber"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+              </div>
+              <div class="channel-fader-container">
+                <input type="range" class="channel-fader vertical-fader" id="mixer-a-volume" min="0" max="1" step="0.01" value="0.8">
+              </div>
+            </div>
+          </div>
+
+          <!-- Central Module: AutoDJ & Configuration -->
+          <div class="mixer-center-strip">
+            <div class="auto-dj-container">
+              <button class="autodj-btn" id="autodj-toggle">
+                <span class="autodj-led" id="autodj-led"></span>
+                AUTO DJ
+              </button>
+              <div class="autodj-settings">
+                <label for="autodj-time">TRIGGER</label>
+                <div class="number-input-wrapper">
+                  <input type="number" id="autodj-time" min="3" max="60" value="10">
+                  <span class="unit">SEC</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active Deck Status Indicator -->
+            <div class="deck-leds">
+              <div class="deck-indicator" id="led-deck-a">DECK A ACTIVE</div>
+              <div class="deck-indicator" id="led-deck-b">DECK B ACTIVE</div>
+            </div>
+
+            <!-- Match BPM Action Button -->
+            <button class="match-bpm-btn" id="mixer-match-bpm" title="Match BPM across decks">
+              🎛️ MATCH BPM
+            </button>
+
+            <!-- Play Both Action Button -->
+            <button class="dual-play-btn" id="mixer-play-both" title="Play both decks simultaneously">
+              ▶️ PLAY BOTH
+            </button>
+
+            <div class="mixer-brand">
+              <span>VIBE-MIX-2</span>
+            </div>
+          </div>
+
+          <!-- Channel B controls -->
+          <div class="mixer-channel-strip channel-right">
+            <div class="eq-section">
+              <span class="channel-lbl">CH B</span>
+              <div class="eq-control-row">
+                <span class="eq-lbl">HI</span>
+                <div class="knob-wrapper">
+                  <div class="knob-and-val">
+                    <div class="knob" id="mixer-b-eq-hi" data-min="-12" data-max="12" data-value="0">
+                      <div class="knob-pointer"></div>
+                    </div>
+                    <span class="eq-val" id="mixer-b-eq-hi-val">0dB</span>
+                  </div>
+                  <button class="kill-btn" id="mixer-b-kill-hi" title="Kill High Frequency">K</button>
+                </div>
+              </div>
+              <div class="eq-control-row">
+                <span class="eq-lbl">MID</span>
+                <div class="knob-wrapper">
+                  <div class="knob-and-val">
+                    <div class="knob" id="mixer-b-eq-mid" data-min="-12" data-max="12" data-value="0">
+                      <div class="knob-pointer"></div>
+                    </div>
+                    <span class="eq-val" id="mixer-b-eq-mid-val">0dB</span>
+                  </div>
+                  <button class="kill-btn" id="mixer-b-kill-mid" title="Kill Mid Frequency">K</button>
+                </div>
+              </div>
+              <div class="eq-control-row">
+                <span class="eq-lbl">LOW</span>
+                <div class="knob-wrapper">
+                  <div class="knob-and-val">
+                    <div class="knob" id="mixer-b-eq-low" data-min="-12" data-max="12" data-value="0">
+                      <div class="knob-pointer"></div>
+                    </div>
+                    <span class="eq-val" id="mixer-b-eq-low-val">0dB</span>
+                  </div>
+                  <button class="kill-btn" id="mixer-b-kill-low" title="Kill Low Frequency">K</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="fader-section">
+              <div class="channel-fader-container">
+                <input type="range" class="channel-fader vertical-fader" id="mixer-b-volume" min="0" max="1" step="0.01" value="0.8">
+              </div>
+              <!-- VU Meter Right -->
+              <div class="vu-meter" id="deck-b-vu">
+                <div class="vu-led red"></div>
+                <div class="vu-led amber"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+                <div class="vu-led green"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Master Crossfader -->
+        <div class="crossfader-container">
+          <div class="crossfader-lbls">
+            <span>A</span>
+            <span>MIX</span>
+            <span>B</span>
+          </div>
+          <div class="crossfader-slider-wrapper">
+            <input type="range" class="crossfader-slider" id="mixer-crossfader" min="0" max="1" step="0.01" value="0.5">
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== DECK B (RIGHT) ==================== -->
+      <section class="deck-panel deck-b-theme" id="deck-panel-b">
+        <div class="deck-header">
+          <span class="deck-label">DECK B</span>
+          <div class="track-info-display">
+            <div class="scrolling-text-container">
+              <div class="track-title" id="deck-b-track-title">NO TRACK LOADED</div>
+            </div>
+            <div class="time-metrics">
+              <span class="time-current" id="deck-b-time-current">00:00</span>
+              <span class="time-divider">/</span>
+              <span class="time-remaining" id="deck-b-time-remain">-00:00</span>
+            </div>
+          </div>
+          <div class="deck-bpm-indicator">
+            <span class="bpm-num" id="deck-b-bpm-display">--</span>
+            <span class="bpm-lbl">BPM</span>
+          </div>
+        </div>
+
+        <div class="deck-visualizer-container">
+          <button class="vis-toggle-btn" id="deck-b-vis-toggle" title="Toggle Visualizer Mode">📊 OVERVIEW</button>
+          <canvas class="deck-visualizer" id="deck-b-visualizer"></canvas>
+          <div class="waveform-progress" id="deck-b-progress-bar">
+            <div class="waveform-progress-fill" id="deck-b-progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="deck-core">
+          <!-- Vinyl Turntable Platter -->
+          <div class="platter-container">
+            <div class="platter-ring"></div>
+            <div class="vinyl-record" id="deck-b-vinyl">
+              <div class="vinyl-grooves"></div>
+              <div class="vinyl-label deck-b-label">
+                <div class="vinyl-label-center"></div>
+                <span class="label-text">DECK B</span>
+              </div>
+            </div>
+            <!-- Tonearm -->
+            <div class="tonearm" id="deck-b-tonearm">
+              <div class="tonearm-base"></div>
+              <div class="tonearm-arm"></div>
+              <div class="tonearm-head"></div>
+            </div>
+          </div>
+
+          <!-- Pitch & Speed controls -->
+          <div class="pitch-slider-container">
+            <span class="pitch-lbl">PITCH</span>
+            <input type="range" class="pitch-slider" id="deck-b-pitch" min="-8" max="8" step="0.05" value="0">
+            <div class="pitch-readout">
+              <span id="deck-b-pitch-value">+0.0%</span>
+              <button class="pitch-reset-btn" id="deck-b-pitch-reset">RESET</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deck Transport Controls -->
+        <div class="transport-controls">
+          <button class="cue-btn" id="deck-b-cue" title="Cue Point (C)">CUE</button>
+          <button class="play-btn" id="deck-b-play" title="Play / Pause (Space / L)">
+            <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="pause-icon hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="stop-btn" id="deck-b-stop" title="Stop Track">
+            <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+          </button>
+          <button class="next-btn" id="deck-b-next" title="Next Track">
+            <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== PLAYLIST SECTIONS ==================== -->
+    <section class="playlists-container">
+      
+      <!-- Playlist Deck A -->
+      <div class="playlist-box panel-blur" id="playlist-box-a">
+        <div class="playlist-header">
+          <h2>DECK A PLAYLIST</h2>
+          <div class="playlist-actions">
+            <button class="btn btn-secondary playlist-import-btn" id="btn-import-a">IMPORT</button>
+            <button class="btn btn-secondary playlist-export-btn" id="btn-export-a">EXPORT</button>
+            <input type="file" id="file-import-a" accept=".json" style="display: none;">
+          </div>
+        </div>
+
+        <!-- Loader Section -->
+        <div class="loader-section">
+          <div class="url-loader">
+            <input type="text" id="url-input-a" placeholder="Enter audio URL...">
+            <button class="btn btn-primary" id="btn-load-url-a">ADD URL</button>
+          </div>
+          <div class="file-loader">
+            <label for="file-input-a" class="btn btn-accent btn-file-label">SELECT FILE</label>
+            <input type="file" id="file-input-a" accept="audio/*" multiple>
+            
+            <label for="folder-input-a" class="btn btn-secondary btn-file-label" title="Relocate Missing Files in a Folder">LOCATE FOLDER</label>
+            <input type="file" id="folder-input-a" webkitdirectory directory multiple style="display: none;">
+          </div>
+        </div>
+
+        <!-- Track List Table -->
+        <div class="playlist-scroll">
+          <table class="playlist-table" id="playlist-table-a">
+            <thead>
+              <tr>
+                <th width="5%">#</th>
+                <th width="45%">Title</th>
+                <th width="20%">BPM</th>
+                <th width="15%">Duration</th>
+                <th width="15%">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="playlist-body-a">
+              <!-- Injected by JavaScript -->
+            </tbody>
+          </table>
+          <div class="empty-playlist-msg" id="empty-msg-a">Playlist is empty. Add a track above!</div>
+        </div>
+      </div>
+
+      <!-- Playlist Deck B -->
+      <div class="playlist-box panel-blur" id="playlist-box-b">
+        <div class="playlist-header">
+          <h2>DECK B PLAYLIST</h2>
+          <div class="playlist-actions">
+            <button class="btn btn-secondary playlist-import-btn" id="btn-import-b">IMPORT</button>
+            <button class="btn btn-secondary playlist-export-btn" id="btn-export-b">EXPORT</button>
+            <input type="file" id="file-import-b" accept=".json" style="display: none;">
+          </div>
+        </div>
+
+        <!-- Loader Section -->
+        <div class="loader-section">
+          <div class="url-loader">
+            <input type="text" id="url-input-b" placeholder="Enter audio URL...">
+            <button class="btn btn-primary" id="btn-load-url-b">ADD URL</button>
+          </div>
+          <div class="file-loader">
+            <label for="file-input-b" class="btn btn-accent btn-file-label">SELECT FILE</label>
+            <input type="file" id="file-input-b" accept="audio/*" multiple>
+            
+            <label for="folder-input-b" class="btn btn-secondary btn-file-label" title="Relocate Missing Files in a Folder">LOCATE FOLDER</label>
+            <input type="file" id="folder-input-b" webkitdirectory directory multiple style="display: none;">
+          </div>
+        </div>
+
+        <!-- Track List Table -->
+        <div class="playlist-scroll">
+          <table class="playlist-table" id="playlist-table-b">
+            <thead>
+              <tr>
+                <th width="5%">#</th>
+                <th width="45%">Title</th>
+                <th width="20%">BPM</th>
+                <th width="15%">Duration</th>
+                <th width="15%">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="playlist-body-b">
+              <!-- Injected by JavaScript -->
+            </tbody>
+          </table>
+          <div class="empty-playlist-msg" id="empty-msg-b">Playlist is empty. Add a track above!</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- App Instructions Overlay Toggle / Footer info -->
+    <footer class="app-footer">
+      <p>🎛️ Keyboard Shortcuts: <strong>Space</strong>: Play/Pause Current Deck | <strong>A</strong>: Play/Pause Deck A | <strong>L</strong>: Play/Pause Deck B | <strong>C</strong>: Cue Deck A | Double click BPM columns to edit.</p>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

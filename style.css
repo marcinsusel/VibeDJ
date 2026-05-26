@@ -1,0 +1,1479 @@
+/* ==========================================
+   VibeDJ - Premium Stylesheet
+   ========================================== */
+
+:root {
+  --bg-color: #08090d;
+  --panel-bg: rgba(22, 24, 37, 0.6);
+  --panel-border: rgba(255, 255, 255, 0.07);
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  
+  /* Color Palettes */
+  --deck-a-color: #00f2fe;
+  --deck-a-glow: rgba(0, 242, 254, 0.3);
+  --deck-b-color: #f35588;
+  --deck-b-glow: rgba(243, 85, 136, 0.3);
+  
+  --active-green: #39ff14;
+  --active-glow: rgba(57, 255, 20, 0.4);
+  
+  --mixer-knob: #1f2937;
+  --mixer-accent: #f59e0b; /* Amber */
+  
+  --transition-speed: 0.3s;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-color);
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(0, 242, 254, 0.05) 0px, transparent 50%),
+    radial-gradient(at 90% 80%, rgba(243, 85, 136, 0.05) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+.app-container {
+  width: 96%;
+  max-width: 1440px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==========================================
+   Header Styles
+   ========================================== */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(16px);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 24px;
+}
+
+.logo h1 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.logo h1 span {
+  color: var(--deck-a-color);
+  text-shadow: 0 0 10px var(--deck-a-glow);
+}
+
+.badge {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--deck-b-color), #ad33b4);
+  padding: 4px 8px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-indicator {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all var(--transition-speed);
+}
+
+.status-indicator.offline {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.status-indicator.online {
+  background: rgba(57, 255, 20, 0.1);
+  border-color: rgba(57, 255, 20, 0.3);
+  color: var(--active-green);
+  box-shadow: 0 0 10px var(--active-glow);
+}
+
+.time-display {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+/* ==========================================
+   Main Console Grid
+   ========================================== */
+.console-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.95fr 1.1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .console-grid {
+    grid-template-columns: 1fr;
+  }
+  .mixer-panel {
+    order: 3;
+  }
+}
+
+.deck-panel, .mixer-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ==========================================
+   Deck Header & Track Displays
+   ========================================== */
+.deck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.deck-label {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+}
+
+.deck-a-theme .deck-label {
+  color: var(--deck-a-color);
+  text-shadow: 0 0 8px var(--deck-a-glow);
+}
+
+.deck-b-theme .deck-label {
+  color: var(--deck-b-color);
+  text-shadow: 0 0 8px var(--deck-b-glow);
+}
+
+.track-info-display {
+  flex-grow: 1;
+  margin: 0 20px;
+  max-width: 50%;
+  overflow: hidden;
+}
+
+.scrolling-text-container {
+  overflow: hidden;
+  position: relative;
+  height: 20px;
+}
+
+.track-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  white-space: nowrap;
+  animation: scroll-text 10s linear infinite;
+  color: var(--text-primary);
+}
+
+@keyframes scroll-text {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.time-metrics {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.deck-bpm-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.bpm-num {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.deck-a-theme .bpm-num { color: var(--deck-a-color); }
+.deck-b-theme .bpm-num { color: var(--deck-b-color); }
+
+.bpm-lbl {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+/* ==========================================
+   Visualizers
+   ========================================== */
+.deck-visualizer-container {
+  position: relative;
+  height: 70px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.deck-visualizer {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.waveform-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.waveform-progress-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+.deck-a-theme .waveform-progress-fill { background: var(--deck-a-color); }
+.deck-b-theme .waveform-progress-fill { background: var(--deck-b-color); }
+
+/* ==========================================
+   Turntable Core & Vinyl
+   ========================================== */
+.deck-core {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  gap: 15px;
+}
+
+.platter-container {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, #252833 0%, #0d0f14 100%);
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 4px 10px rgba(0, 0, 0, 0.8),
+    0 10px 20px rgba(0, 0, 0, 0.5),
+    0 0 1px 2px rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.platter-ring {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.03);
+}
+
+.vinyl-record {
+  position: relative;
+  width: 82%;
+  height: 82%;
+  background: radial-gradient(circle, #18191f 40%, #06070a 100%);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 12px rgba(0,0,0,0.6),
+    inset 0 0 12px rgba(0,0,0,0.9);
+  transition: box-shadow var(--transition-speed);
+}
+
+/* Vinyl Grooves Effect */
+.vinyl-grooves {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    rgba(0,0,0,0) 0px,
+    rgba(0,0,0,0) 2px,
+    rgba(255,255,255,0.015) 3px,
+    rgba(0,0,0,0) 4px
+  );
+}
+
+.vinyl-label {
+  position: absolute;
+  top: 32%;
+  left: 32%;
+  width: 36%;
+  height: 36%;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+
+.vinyl-label-center {
+  width: 14px;
+  height: 14px;
+  background: var(--bg-color);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  position: absolute;
+  z-index: 5;
+}
+
+.label-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: -12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.deck-a-label { background: radial-gradient(circle, #081d2a 0%, #002236 100%); }
+.deck-b-label { background: radial-gradient(circle, #2b0c1b 0%, #3a001a 100%); }
+
+/* Tonearm Design */
+.tonearm {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 70px;
+  height: 160px;
+  pointer-events: none;
+  z-index: 10;
+  transform-origin: 35px 20px;
+  transform: rotate(-10deg);
+  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tonearm-base {
+  position: absolute;
+  top: 5px;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, #4b5563 0%, #1f2937 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+}
+
+.tonearm-arm {
+  position: absolute;
+  top: 25px;
+  left: 33px;
+  width: 4px;
+  height: 100px;
+  background: linear-gradient(to right, #9ca3af, #d1d5db, #4b5563);
+  border-radius: 2px;
+  box-shadow: 1px 0 2px rgba(0,0,0,0.3);
+}
+
+.tonearm-head {
+  position: absolute;
+  top: 120px;
+  left: 25px;
+  width: 14px;
+  height: 25px;
+  background: #1f2937;
+  border-radius: 4px;
+  border: 1px solid #4b5563;
+  transform: rotate(15deg);
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+/* Vinyl Spin Class */
+.vinyl-record.spinning {
+  animation: vinyl-rotate 3s linear infinite;
+  animation-play-state: running;
+}
+
+@keyframes vinyl-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Active arm rotation on playing */
+.tonearm.active {
+  transform: rotate(18deg) !important;
+}
+
+/* ==========================================
+   Pitch Sliders
+   ========================================== */
+.pitch-slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  height: 220px;
+  padding: 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.pitch-lbl {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.pitch-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  writing-mode: vertical-lr; /* Vertical layout on supporting agents */
+  direction: rtl;            /* Start 0 at center (or bottom) */
+  width: 8px;
+  height: 130px;
+  background: #1f2937;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.pitch-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 12px;
+  border-radius: 3px;
+  background: #e5e7eb;
+  border: 2px solid #374151;
+  cursor: ns-resize;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.deck-a-theme .pitch-slider::-webkit-slider-thumb { background: var(--deck-a-color); }
+.deck-b-theme .pitch-slider::-webkit-slider-thumb { background: var(--deck-b-color); }
+
+.pitch-readout {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.pitch-reset-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-primary);
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.pitch-reset-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ==========================================
+   Deck Transport Controls
+   ========================================== */
+.transport-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.transport-controls button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.play-btn {
+  width: 52px !important;
+  height: 52px !important;
+}
+
+.transport-controls svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.cue-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: var(--mixer-accent);
+}
+.cue-btn:hover {
+  background: var(--mixer-accent);
+  color: #000;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.stop-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  color: #ef4444;
+}
+.stop-btn:hover {
+  background: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.next-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+}
+.next-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.deck-a-theme .play-btn {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: rgba(0, 242, 254, 0.4);
+  color: var(--deck-a-color);
+}
+.deck-a-theme .play-btn:hover, .deck-a-theme .play-btn.active {
+  background: var(--deck-a-color);
+  color: #000;
+  box-shadow: 0 0 15px var(--deck-a-glow);
+}
+
+.deck-b-theme .play-btn {
+  background: rgba(243, 85, 136, 0.15);
+  border-color: rgba(243, 85, 136, 0.4);
+  color: var(--deck-b-color);
+}
+.deck-b-theme .play-btn:hover, .deck-b-theme .play-btn.active {
+  background: var(--deck-b-color);
+  color: #000;
+  box-shadow: 0 0 15px var(--deck-b-glow);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   Mixer Styles
+   ========================================== */
+.mixer-panel {
+  background: radial-gradient(ellipse at center, #1b2030 0%, #0d0f17 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.mixer-header {
+  text-align: center;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 10px;
+}
+
+.mixer-header h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 3px;
+  color: var(--text-secondary);
+}
+
+.mixer-channels {
+  display: grid;
+  grid-template-columns: 1.15fr 0.7fr 1.15fr;
+  flex-grow: 1;
+  padding: 10px 0;
+}
+
+.mixer-channel-strip {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+
+.channel-left { border-right: 1px dashed rgba(255,255,255,0.05); }
+.channel-right { border-left: 1px dashed rgba(255,255,255,0.05); }
+
+.channel-lbl {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.eq-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.eq-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.eq-lbl {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  width: 22px;
+  text-align: left;
+}
+
+.knob-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.knob {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  background: radial-gradient(circle, #2d3748 0%, #111827 100%);
+  border: 2px solid #374151;
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 2px 4px rgba(255,255,255,0.05),
+    0 3px 6px rgba(0,0,0,0.4);
+  cursor: ns-resize;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.knob-pointer {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2.5px;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 1px;
+}
+
+.channel-left .knob:hover {
+  border-color: var(--deck-a-color);
+  box-shadow: 
+    inset 0 2px 4px rgba(255,255,255,0.05),
+    0 0 8px var(--deck-a-glow);
+}
+
+.channel-right .knob:hover {
+  border-color: var(--deck-b-color);
+  box-shadow: 
+    inset 0 2px 4px rgba(255,255,255,0.05),
+    0 0 8px var(--deck-b-glow);
+}
+
+.kill-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 900;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.05);
+  color: #ef4444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-speed);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.kill-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fff;
+  border-color: rgba(239, 68, 68, 0.8);
+}
+
+.kill-btn.active {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+  animation: kill-pulse 1s infinite alternate;
+}
+
+@keyframes kill-pulse {
+  from { box-shadow: 0 0 4px rgba(239, 68, 68, 0.5); }
+  to { box-shadow: 0 0 12px rgba(239, 68, 68, 0.9); }
+}
+
+.knob-and-val {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.eq-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  min-width: 38px;
+}
+
+.fader-section {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 15px;
+  height: 120px;
+}
+
+.channel-fader-container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.vertical-fader {
+  -webkit-appearance: none;
+  appearance: none;
+  writing-mode: vertical-lr;
+  width: 10px;
+  height: 100px;
+  background: #0f172a;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.vertical-fader::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 16px;
+  background: linear-gradient(to right, #4b5563, #f3f4f6, #4b5563);
+  border: 2px solid #1f2937;
+  border-radius: 3px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  cursor: pointer;
+}
+
+/* LED VU Meters */
+.vu-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 100px;
+  width: 8px;
+  justify-content: flex-end;
+}
+
+.vu-led {
+  width: 100%;
+  height: 8px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: background 0.05s ease-out;
+}
+
+/* Illuminated VU Led rules */
+.vu-led.green.lit { background: #10b981; box-shadow: 0 0 4px rgba(16, 185, 129, 0.6); }
+.vu-led.amber.lit { background: #f59e0b; box-shadow: 0 0 4px rgba(245, 158, 11, 0.6); }
+.vu-led.red.lit { background: #ef4444; box-shadow: 0 0 4px rgba(239, 68, 68, 0.6); }
+
+/* Mixer Center Strip & AutoDJ */
+.mixer-center-strip {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+
+.auto-dj-container {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  width: 90%;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.autodj-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.autodj-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.autodj-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  display: inline-block;
+  box-shadow: 0 0 4px rgba(239, 68, 68, 0.4);
+}
+
+/* Flashing Active AutoDJ State */
+.autodj-btn.active {
+  background: rgba(57, 255, 20, 0.1);
+  border-color: rgba(57, 255, 20, 0.4);
+  color: var(--active-green);
+  box-shadow: 0 0 10px var(--active-glow);
+}
+
+.autodj-btn.active .autodj-led {
+  background: var(--active-green);
+  animation: led-pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes led-pulse {
+  from { opacity: 0.4; box-shadow: 0 0 1px var(--active-glow); }
+  to { opacity: 1; box-shadow: 0 0 12px var(--active-green); }
+}
+
+.match-bpm-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  background: rgba(245, 158, 11, 0.08); /* slight amber tint */
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--mixer-accent);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 90%;
+  text-align: center;
+  transition: all var(--transition-speed);
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  margin-top: 5px;
+}
+
+.match-bpm-btn:hover {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.35);
+}
+
+.match-bpm-btn:active {
+  transform: scale(0.97);
+}
+
+.dual-play-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  background: rgba(57, 255, 20, 0.06); /* slight green tint */
+  border: 1px solid rgba(57, 255, 20, 0.25);
+  color: var(--active-green);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 90%;
+  text-align: center;
+  transition: all var(--transition-speed);
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  margin-top: 8px;
+}
+
+.dual-play-btn:hover {
+  background: rgba(57, 255, 20, 0.15);
+  border-color: rgba(57, 255, 20, 0.45);
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+}
+
+.dual-play-btn:active {
+  transform: scale(0.97);
+}
+
+.autodj-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.autodj-settings label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.number-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+.number-input-wrapper input {
+  font-family: 'Share Tech Mono', monospace;
+  background: transparent;
+  border: none;
+  color: var(--active-green);
+  width: 32px;
+  text-align: center;
+  font-size: 13px;
+  outline: none;
+}
+
+.number-input-wrapper .unit {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.deck-leds {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 90%;
+}
+
+.deck-indicator {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 6px 0;
+  text-align: center;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 6px;
+  color: var(--text-muted);
+  transition: all var(--transition-speed);
+}
+
+#led-deck-a.active {
+  background: rgba(0, 242, 254, 0.08);
+  border-color: rgba(0, 242, 254, 0.3);
+  color: var(--deck-a-color);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+}
+
+#led-deck-b.active {
+  background: rgba(243, 85, 136, 0.08);
+  border-color: rgba(243, 85, 136, 0.3);
+  color: var(--deck-b-color);
+  box-shadow: 0 0 10px rgba(243, 85, 136, 0.2);
+}
+
+.mixer-brand {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.15);
+  margin-top: 15px;
+}
+
+/* Master Crossfader Panel */
+.crossfader-container {
+  border-top: 2px solid rgba(255, 255, 255, 0.05);
+  padding: 15px 20px 5px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.crossfader-lbls {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.crossfader-slider-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.crossfader-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #0f172a;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.crossfader-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 24px;
+  background: linear-gradient(to bottom, #4b5563, #f3f4f6, #4b5563);
+  border: 2px solid #1f2937;
+  border-radius: 3px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  cursor: pointer;
+}
+
+/* ==========================================
+   Playlists Layout & styling
+   ========================================== */
+.playlists-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .playlists-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.playlist-box {
+  background: rgba(22, 24, 37, 0.4);
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  min-width: 0; /* Lock width within grid container */
+}
+
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding-bottom: 12px;
+  margin-bottom: 15px;
+}
+
+.playlist-header h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+#playlist-box-a h2 { color: var(--deck-a-color); }
+#playlist-box-b h2 { color: var(--deck-b-color); }
+
+.playlist-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.loader-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.url-loader {
+  display: flex;
+  flex-grow: 1;
+  gap: 8px;
+}
+
+.url-loader input {
+  flex-grow: 1;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-size: 13px;
+  outline: none;
+  font-family: 'Outfit', sans-serif;
+  transition: all var(--transition-speed);
+}
+
+.url-loader input:focus {
+  border-color: rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.5);
+}
+
+.file-loader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.file-loader input[type="file"] {
+  display: none;
+}
+
+/* Beautiful Custom Buttons */
+.btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--transition-speed);
+  letter-spacing: 0.5px;
+}
+
+.btn-primary {
+  background: var(--mixer-knob);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+.btn-primary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.btn-accent {
+  background: rgba(57, 255, 20, 0.1);
+  border-color: rgba(57, 255, 20, 0.3);
+  color: var(--active-green);
+}
+.btn-accent:hover {
+  background: var(--active-green);
+  color: #000;
+  box-shadow: 0 0 10px var(--active-glow);
+}
+
+.btn-file-label {
+  display: inline-block;
+  text-align: center;
+}
+
+/* Playlist disabled state when deck is playing */
+.playlist-disabled {
+  pointer-events: none;
+  opacity: 0.4;
+  filter: grayscale(40%) blur(0.5px);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+/* Playlist Scroll & Table */
+.playlist-scroll {
+  height: 200px;
+  overflow-y: auto;
+  position: relative;
+  background: rgba(0,0,0,0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.playlist-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  table-layout: fixed; /* Lock column widths and prevent expansion */
+}
+
+.playlist-table th {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: sticky;
+  top: 0;
+  background: #11131e;
+  z-index: 2;
+}
+
+.playlist-table td {
+  padding: 8px 15px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+.playlist-table tbody tr {
+  cursor: pointer;
+  transition: background var(--transition-speed);
+}
+
+.playlist-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Loaded and Highlighted Track States */
+.playlist-table tbody tr.loaded-track {
+  background: rgba(57, 255, 20, 0.05);
+}
+#playlist-box-a tr.loaded-track td { color: var(--deck-a-color); }
+#playlist-box-b tr.loaded-track td { color: var(--deck-b-color); }
+
+.playlist-table tbody tr.highlighted-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+#playlist-box-a tr.highlighted-track td:nth-child(2) { font-weight: 600; text-shadow: 0 0 5px var(--deck-a-glow); }
+#playlist-box-b tr.highlighted-track td:nth-child(2) { font-weight: 600; text-shadow: 0 0 5px var(--deck-b-glow); }
+
+.playlist-table tbody tr.missing-file-track {
+  opacity: 0.55;
+}
+
+.playlist-table tbody tr.missing-file-track:hover {
+  opacity: 0.85;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.missing-file-warning {
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* BPM Inline input field */
+.bpm-input {
+  font-family: 'Share Tech Mono', monospace;
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--active-green);
+  border-radius: 4px;
+  width: 50px;
+  text-align: center;
+  font-size: 12px;
+  padding: 2px 0;
+  outline: none;
+}
+
+.bpm-cell {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.play-row-btn {
+  font-size: 11px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-speed);
+  margin-right: 8px;
+}
+.play-row-btn:hover {
+  color: var(--active-green);
+}
+
+.delete-row-btn {
+  font-size: 11px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-speed);
+}
+.delete-row-btn:hover {
+  color: #ef4444;
+}
+
+.empty-playlist-msg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  width: 80%;
+  pointer-events: none;
+}
+
+/* ==========================================
+   Footer
+   ========================================== */
+.app-footer {
+  text-align: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 10px;
+}
+
+.app-footer p {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.app-footer strong {
+  color: var(--text-secondary);
+}
+
+/* ==========================================
+   Visualizer Toggle Button Styles
+   ========================================== */
+.vis-toggle-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(22, 24, 37, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  backdrop-filter: blur(4px);
+  outline: none;
+  letter-spacing: 0.5px;
+}
+
+.vis-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.deck-a-theme .vis-toggle-btn:hover {
+  box-shadow: 0 0 8px var(--deck-a-glow);
+  color: var(--deck-a-color);
+  border-color: var(--deck-a-color);
+}
+
+.deck-b-theme .vis-toggle-btn:hover {
+  box-shadow: 0 0 8px var(--deck-b-glow);
+  color: var(--deck-b-color);
+  border-color: var(--deck-b-color);
+}
